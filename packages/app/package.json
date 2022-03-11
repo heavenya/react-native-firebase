@@ -65,14 +65,14 @@
   },
   "sdkVersions": {
     "ios": {
-      "firebase": "8.12.1"
+      "firebase": "8.13.0"
     },
     "android": {
       "minSdk": 19,
       "targetSdk": 31,
       "compileSdk": 31,
       "buildTools": "30.0.3",
-      "firebase": "29.1.0",
+      "firebase": "29.2.0",
       "firebaseCrashlyticsGradle": "2.8.1",
       "firebasePerfGradle": "1.4.1",
       "gmsGoogleServicesGradle": "4.3.10",
