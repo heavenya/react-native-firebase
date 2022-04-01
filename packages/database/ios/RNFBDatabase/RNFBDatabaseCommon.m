@@ -51,9 +51,41 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
     firDatabase = [FIRDatabase databaseForApp:firebaseApp URL:dbURL];
   }
 
-  [RNFBDatabaseCommon setDatabaseConfig:firDatabase dbURL:dbURL];
+  // [RNFBDatabaseCommon setDatabaseConfig:firDatabase dbURL:dbURL];
 
   return firDatabase;
+}
+
++ (FIRDatabaseReference *)fireRef:(NSString *)path dbURL:(NSString *)dbURL firebaseApp(FIRApp *)firebaseApp {
+  FIRDatabaseReference *r;
+
+  if (dbURL == nil && dbURL.length == 0) {
+    r = [[FIRDatabase databaseForApp:firebaseApp] referenceWithPath:path];
+  } else {
+    r = [[FIRDatabase databaseForApp:firebaseApp URL:dbURL] referenceWithPath:path];
+  }
+
+  // [RNFBDatabaseCommon setDatabaseConfig:firDatabase dbURL:dbURL];
+
+  if(path != nil && [path rangeOfString:@"."].location == NSNotFound){
+    [r keepSynced:YES];
+  }
+
+  return r;
+}
+
++ (void)turnOnFireCache:(NSString *)dbURL {
+
+  if (dbURL == nil || dbURL.length == 0) {
+    [FIRDatabase database].persistenceEnabled = YES;
+    [FIRDatabase setLoggingEnabled:(BOOL)true];
+  } else {
+    [FIRDatabase URL:dbURL].persistenceEnabled = YES;
+  }
+}
+
++ (void)turnOnLogging {
+  [FIRDatabase setLoggingEnabled:(BOOL)true];
 }
 
 + (void)setDatabaseConfig:(FIRDatabase *)firDatabase dbURL:(NSString *)dbURL {
@@ -105,16 +137,17 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
   }
 }
 
-+ (FIRDatabaseReference *)getReferenceForDatabase:(FIRDatabase *)firebaseDatabase
-                                             path:(NSString *)path {
++ (FIRDatabaseReference *)getReferenceForDatabase:(FIRDatabase *)firebaseDatabase path:(NSString *)path {
   @synchronized(configSettingsLock) {
-    return [firebaseDatabase referenceWithPath:path];
+    FIRDatabaseReference *r = [firebaseDatabase referenceWithPath:path];
+
+    [r keepSynced:YES];
+
+    return r;
   }
 }
 
-+ (FIRDatabaseReference *)getReferenceForDatabase:(NSString *)key
-                                 firebaseDatabase:(FIRDatabase *)firebaseDatabase
-                                             path:(NSString *)path {
++ (FIRDatabaseReference *)getReferenceForDatabase:(NSString *)key firebaseDatabase:(FIRDatabase *)firebaseDatabase path:(NSString *)path {
   @synchronized(configSettingsLock) {
     FIRDatabaseReference *cachedReference = references[key];
 
@@ -125,6 +158,8 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
     FIRDatabaseReference *databaseReference = [firebaseDatabase referenceWithPath:path];
 
     references[key] = databaseReference;
+
+    [databaseReference keepSynced:YES];
 
     return databaseReference;
   }

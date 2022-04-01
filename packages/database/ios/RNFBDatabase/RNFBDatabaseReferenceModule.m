@@ -41,9 +41,8 @@ RCT_EXPORT_METHOD(set
                   : (NSDictionary *)props
                   : (RCTPromiseResolveBlock)resolve
                   : (RCTPromiseRejectBlock)reject) {
-  FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
-  FIRDatabaseReference *firDatabaseReference =
-      [RNFBDatabaseCommon getReferenceForDatabase:firDatabase path:path];
+  // FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
+  FIRDatabaseReference *firDatabaseReference = [RNFBDatabaseCommon fireRef:path dbURL:dbURL firebaseApp:firebaseApp];
 
   [firDatabaseReference setValue:[props valueForKey:@"value"]
              withCompletionBlock:^(NSError *error, FIRDatabaseReference *ref) {
@@ -62,9 +61,8 @@ RCT_EXPORT_METHOD(update
                   : (NSDictionary *)props
                   : (RCTPromiseResolveBlock)resolve
                   : (RCTPromiseRejectBlock)reject) {
-  FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
-  FIRDatabaseReference *firDatabaseReference =
-      [RNFBDatabaseCommon getReferenceForDatabase:firDatabase path:path];
+  // FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
+  FIRDatabaseReference *firDatabaseReference = [RNFBDatabaseCommon fireRef:path dbURL:dbURL firebaseApp:firebaseApp];
 
   [firDatabaseReference updateChildValues:[props valueForKey:@"values"]
                       withCompletionBlock:^(NSError *error, FIRDatabaseReference *ref) {
@@ -83,9 +81,8 @@ RCT_EXPORT_METHOD(setWithPriority
                   : (NSDictionary *)props
                   : (RCTPromiseResolveBlock)resolve
                   : (RCTPromiseRejectBlock)reject) {
-  FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
-  FIRDatabaseReference *firDatabaseReference =
-      [RNFBDatabaseCommon getReferenceForDatabase:firDatabase path:path];
+  // FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
+  FIRDatabaseReference *firDatabaseReference = [RNFBDatabaseCommon fireRef:path dbURL:dbURL firebaseApp:firebaseApp];
 
   [firDatabaseReference setValue:[props valueForKey:@"value"]
                      andPriority:[props valueForKey:@"priority"]
@@ -104,9 +101,8 @@ RCT_EXPORT_METHOD(remove
                   : (NSString *)path
                   : (RCTPromiseResolveBlock)resolve
                   : (RCTPromiseRejectBlock)reject) {
-  FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
-  FIRDatabaseReference *firDatabaseReference =
-      [RNFBDatabaseCommon getReferenceForDatabase:firDatabase path:path];
+  // FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
+  FIRDatabaseReference *firDatabaseReference = [RNFBDatabaseCommon fireRef:path dbURL:dbURL firebaseApp:firebaseApp];
 
   [firDatabaseReference
       removeValueWithCompletionBlock:^(NSError *error, FIRDatabaseReference *ref) {
@@ -125,9 +121,8 @@ RCT_EXPORT_METHOD(setPriority
                   : (NSDictionary *)props
                   : (RCTPromiseResolveBlock)resolve
                   : (RCTPromiseRejectBlock)reject) {
-  FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
-  FIRDatabaseReference *firDatabaseReference =
-      [RNFBDatabaseCommon getReferenceForDatabase:firDatabase path:path];
+  // FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
+  FIRDatabaseReference *firDatabaseReference = [RNFBDatabaseCommon fireRef:path dbURL:dbURL firebaseApp:firebaseApp];
 
   [firDatabaseReference setPriority:[props valueForKey:@"priority"]
                 withCompletionBlock:^(NSError *error, FIRDatabaseReference *ref) {

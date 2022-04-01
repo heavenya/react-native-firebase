@@ -17,6 +17,8 @@ package io.invertase.firebase.database;
  *
  */
 
+import androidx.annotation.NonNull;
+
 import static io.invertase.firebase.common.RCTConvertFirebase.readableMapToWritableMap;
 import static io.invertase.firebase.database.ReactNativeFirebaseDatabaseCommon.*;
 import static io.invertase.firebase.database.UniversalFirebaseDatabaseCommon.fireRef;
@@ -31,7 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
-import javax.annotation.Nonnull;
+// import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseModule {
@@ -101,7 +103,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
     ValueEventListener onceValueEventListener =
         new ValueEventListener() {
           @Override
-          public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
+          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Tasks.call(getExecutor(), () -> snapshotToMap(dataSnapshot))
                 .addOnCompleteListener(
                     task -> {
@@ -114,7 +116,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
           }
 
           @Override
-          public void onCancelled(@Nonnull DatabaseError error) {
+          public void onCancelled(@NonNull DatabaseError error) {
             rejectPromiseDatabaseException(
                 promise,
                 new UniversalDatabaseException(
@@ -137,7 +139,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
     ChildEventListener childEventListener =
         new ChildEventListener() {
           @Override
-          public void onChildAdded(@Nonnull DataSnapshot dataSnapshot, String previousChildName) {
+          public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
             if ("child_added".equals(eventType)) {
               databaseQuery.removeEventListener(this);
               Tasks.call(
@@ -155,7 +157,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
           }
 
           @Override
-          public void onChildChanged(@Nonnull DataSnapshot dataSnapshot, String previousChildName) {
+          public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
             if ("child_changed".equals(eventType)) {
               databaseQuery.removeEventListener(this);
               Tasks.call(
@@ -173,7 +175,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
           }
 
           @Override
-          public void onChildRemoved(@Nonnull DataSnapshot dataSnapshot) {
+          public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
             if ("child_removed".equals(eventType)) {
               databaseQuery.removeEventListener(this);
               Tasks.call(getExecutor(), () -> snapshotWithPreviousChildToMap(dataSnapshot, null))
@@ -189,7 +191,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
           }
 
           @Override
-          public void onChildMoved(@Nonnull DataSnapshot dataSnapshot, String previousChildName) {
+          public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
             if ("child_moved".equals(eventType)) {
               databaseQuery.removeEventListener(this);
               Tasks.call(
@@ -207,7 +209,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
           }
 
           @Override
-          public void onCancelled(@Nonnull DatabaseError error) {
+          public void onCancelled(@NonNull DatabaseError error) {
             databaseQuery.removeEventListener(this);
             rejectPromiseDatabaseException(
                 promise,
@@ -234,12 +236,12 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
       ValueEventListener valueEventListener =
           new ValueEventListener() {
             @Override
-            public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
               handleDatabaseEvent(key, "value", registration, dataSnapshot, null);
             }
 
             @Override
-            public void onCancelled(@Nonnull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
               databaseQuery.removeEventListener(eventRegistrationKey);
               handleDatabaseEventError(key, registration, error);
             }
@@ -260,7 +262,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
       ChildEventListener childEventListener =
           new ChildEventListener() {
             @Override
-            public void onChildAdded(@Nonnull DataSnapshot dataSnapshot, String previousChildName) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
               if ("child_added".equals(eventType)) {
                 handleDatabaseEvent(
                     key, "child_added", registration, dataSnapshot, previousChildName);
@@ -269,7 +271,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
 
             @Override
             public void onChildChanged(
-                @Nonnull DataSnapshot dataSnapshot, String previousChildName) {
+                @NonNull DataSnapshot dataSnapshot, String previousChildName) {
               if ("child_changed".equals(eventType)) {
                 handleDatabaseEvent(
                     key, "child_changed", registration, dataSnapshot, previousChildName);
@@ -277,14 +279,14 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
             }
 
             @Override
-            public void onChildRemoved(@Nonnull DataSnapshot dataSnapshot) {
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
               if ("child_removed".equals(eventType)) {
                 handleDatabaseEvent(key, "child_removed", registration, dataSnapshot, null);
               }
             }
 
             @Override
-            public void onChildMoved(@Nonnull DataSnapshot dataSnapshot, String previousChildName) {
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
               if ("child_moved".equals(eventType)) {
                 handleDatabaseEvent(
                     key, "child_moved", registration, dataSnapshot, previousChildName);
@@ -292,7 +294,7 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
             }
 
             @Override
-            public void onCancelled(@Nonnull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
               databaseQuery.removeEventListener(eventRegistrationKey);
               handleDatabaseEventError(key, registration, error);
             }
@@ -466,7 +468,8 @@ public class ReactNativeFirebaseDatabaseQueryModule extends ReactNativeFirebaseM
       Boolean bool,
       Promise promise) {
     DatabaseReference reference = fireRef(path, dbURL, app);
-    getDatabaseQueryInstance(key, reference, modifiers).query.keepSynced(bool);
+    reference.keepSynced(bool);
+    // getDatabaseQueryInstance(key, reference, modifiers).query.keepSynced(bool);
     promise.resolve(null);
   }
 }

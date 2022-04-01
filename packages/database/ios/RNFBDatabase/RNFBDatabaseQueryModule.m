@@ -178,6 +178,10 @@ RCT_EXPORT_MODULE();
                                              }];
 }
 
+RCT_EXPORT_METHOD(turnOnFirePersistence : (NSString *)dbURL){
+  [RNFBDatabaseCommon turnOnFireCache:dbURL];
+}
+
 #pragma mark -
 #pragma mark Firebase Database
 
@@ -189,9 +193,8 @@ RCT_EXPORT_METHOD(once
                   : (NSString *)eventType
                   : (RCTPromiseResolveBlock)resolve
                   : (RCTPromiseRejectBlock)reject) {
-  FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
-  FIRDatabaseReference *firDatabaseReference =
-      [RNFBDatabaseCommon getReferenceForDatabase:firDatabase path:path];
+  // FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
+  FIRDatabaseReference *firDatabaseReference = [RNFBDatabaseCommon fireRef:path dbURL:dbURL firebaseApp:firebaseApp];
   RNFBDatabaseQuery *databaseQuery = [self getDatabaseQueryInstance:firDatabaseReference
                                                           modifiers:modifiers];
 
@@ -238,12 +241,10 @@ RCT_EXPORT_METHOD(keepSynced
                   : (BOOL)value
                   : (RCTPromiseResolveBlock)resolve
                   : (RCTPromiseRejectBlock)reject) {
-  FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
-  FIRDatabaseReference *firDatabaseReference =
-      [RNFBDatabaseCommon getReferenceForDatabase:firDatabase path:path];
-  RNFBDatabaseQuery *databaseQuery = [self getDatabaseQueryInstance:firDatabaseReference
-                                                          modifiers:modifiers];
-  [databaseQuery.query keepSynced:value];
+  // FIRDatabase *firDatabase = [RNFBDatabaseCommon getDatabaseForApp:firebaseApp dbURL:dbURL];
+  FIRDatabaseReference *firDatabaseReference = [RNFBDatabaseCommon fireRef:path dbURL:dbURL firebaseApp:firebaseApp];
+  // RNFBDatabaseQuery *databaseQuery = [self getDatabaseQueryInstance:firDatabaseReference modifiers:modifiers];
+  [firDatabaseReference keepSynced:value];
   resolve([NSNull null]);
 }
 

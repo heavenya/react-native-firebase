@@ -65,9 +65,9 @@ public class UniversalFirebaseDatabaseCommon {
       FirebaseApp firebaseApp = FirebaseApp.getInstance(appName);
 
       if (dbURL != null && dbURL.length() > 0) {
-        r = FirebaseDatabase.getInstance(firebase, dbURL).getReference().child(path);
+        r = FirebaseDatabase.getInstance(firebaseApp, dbURL).getReference().child(path);
       } else {
-        r = FirebaseDatabase.getInstance(firebase).getReference().child(path);
+        r = FirebaseDatabase.getInstance(firebaseApp).getReference().child(path);
       }
     } else {
       // throw "Invalid argument, call to fireRef() with no appName provided";
@@ -102,9 +102,9 @@ public class UniversalFirebaseDatabaseCommon {
       FirebaseApp firebaseApp = FirebaseApp.getInstance(appName);
 
       if (dbURL != null && dbURL.length() > 0) {
-        r = FirebaseDatabase.getInstance(firebase, dbURL);
+        r = FirebaseDatabase.getInstance(firebaseApp, dbURL);
       } else {
-        r = FirebaseDatabase.getInstance(firebase);
+        r = FirebaseDatabase.getInstance(firebaseApp);
       }
     } else {
       if (dbURL != null && dbURL.length() > 0) {
@@ -133,6 +133,7 @@ public class UniversalFirebaseDatabaseCommon {
       FirebaseDatabase.getInstance(dbURL).setPersistenceEnabled(true);
     } else {
       FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+      FirebaseDatabase.getInstance().setLogLevel(Logger.Level.WARN);
     }
     // FirebaseDatabase.getInstance(ref).setPersistenceCacheSizeBytes(100000000);
   }
