@@ -56,7 +56,7 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
   return firDatabase;
 }
 
-+ (FIRDatabaseReference *)fireRef:(NSString *)path dbURL:(NSString *)dbURL firebaseApp(FIRApp *)firebaseApp {
++ (FIRDatabaseReference *)fireRef:(NSString *)path dbURL:(NSString *)dbURL firebaseApp:(FIRApp *)firebaseApp {
   FIRDatabaseReference *r;
 
   if (dbURL == nil && dbURL.length == 0) {
@@ -75,12 +75,11 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
 }
 
 + (void)turnOnFireCache:(NSString *)dbURL {
-
   if (dbURL == nil || dbURL.length == 0) {
-    [FIRDatabase database].persistenceEnabled = YES;
+    [[FIRDatabase database] setPersistenceEnabled:(BOOL)true];
     [FIRDatabase setLoggingEnabled:(BOOL)true];
   } else {
-    [FIRDatabase URL:dbURL].persistenceEnabled = YES;
+    [[FIRDatabase databaseWithURL:dbURL] setPersistenceEnabled:(BOOL)true];
   }
 }
 

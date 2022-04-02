@@ -22,7 +22,7 @@
 
 + (FIRDatabase *)getDatabaseForApp:(FIRApp *)firebaseApp dbURL:(NSString *)dbURL;
 
-+ (FIRDatabaseReference *)fireRef:(NSString *)path dbURL:(NSString *)dbURL firebaseApp(FIRApp *)firebaseApp;
++ (FIRDatabaseReference *)fireRef:(NSString *)path dbURL:(NSString *)dbURL firebaseApp:(FIRApp *)firebaseApp;
 
 + (void)turnOnFireCache:(NSString *)dbURL;
 
