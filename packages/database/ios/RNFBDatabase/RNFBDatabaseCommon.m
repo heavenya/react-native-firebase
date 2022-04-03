@@ -140,7 +140,9 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
   @synchronized(configSettingsLock) {
     FIRDatabaseReference *r = [firebaseDatabase referenceWithPath:path];
 
+   if(path != nil && [path rangeOfString:@"."].location == NSNotFound){
     [r keepSynced:YES];
+   }
 
     return r;
   }
@@ -158,7 +160,9 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
 
     references[key] = databaseReference;
 
-    [databaseReference keepSynced:YES];
+   if(path != nil && [path rangeOfString:@"."].location == NSNotFound){
+    [references keepSynced:YES];
+   }
 
     return databaseReference;
   }
