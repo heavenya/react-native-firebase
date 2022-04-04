@@ -158,11 +158,11 @@ NSString *const DATABASE_PERSISTENCE_CACHE_SIZE = @"firebase_database_persistenc
 
     FIRDatabaseReference *databaseReference = [firebaseDatabase referenceWithPath:path];
 
-    references[key] = databaseReference;
-
    if(path != nil && [path rangeOfString:@"."].location == NSNotFound){
-    [references keepSynced:YES];
+    [databaseReference keepSynced:YES];
    }
+
+    references[key] = databaseReference;
 
     return databaseReference;
   }
