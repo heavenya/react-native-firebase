@@ -720,6 +720,10 @@ export namespace FirebaseFirestoreTypes {
      * });
      * ```
      *
+     * Please be careful using this operator. It may not be reliable enough for use in circumstances where absolute accuracy is required,
+     * as it appears writes to Firestore may sometimes be duplicated in situations not fully understood yet, but possibly correlated with
+     * write frequency. See https://github.com/invertase/react-native-firebase/discussions/5914
+     *
      * @param n The value to increment by.
      */
     static increment(n: number): FieldValue;
@@ -1830,6 +1834,44 @@ export namespace FirebaseFirestoreTypes {
   }
 
   /**
+   * Represents the state of bundle loading tasks.
+   *
+   * Both 'Error' and 'Success' are sinking state: task will abort or complete and there will be no more
+   * updates after they are reported.
+   */
+  export type TaskState = 'Error' | 'Running' | 'Success';
+
+  /**
+   * Represents a progress update or a final state from loading bundles.
+   */
+  export interface LoadBundleTaskProgress {
+    /**
+     * How many bytes have been loaded.
+     */
+    bytesLoaded: number;
+
+    /**
+     * How many documents have been loaded.
+     */
+    documentsLoaded: number;
+
+    /**
+     * Current task state.
+     */
+    taskState: TaskState;
+
+    /**
+     * How many bytes are in the bundle being loaded.
+     */
+    totalBytes: number;
+
+    /**
+     * How many documents are in the bundle being loaded.
+     */
+    totalDocuments: number;
+  }
+
+  /**
    * `firebase.firestore.X`
    */
   export interface Statics {
@@ -2024,6 +2066,29 @@ export namespace FirebaseFirestoreTypes {
      * @param settings A `Settings` object.
      */
     settings(settings: Settings): Promise<void>;
+    /**
+     * Loads a Firestore bundle into the local cache.
+     *
+     * #### Example
+     *
+     * ```js
+     * const resp = await fetch('/createBundle');
+     * const bundleString = await resp.text();
+     * await firestore().loadBundle(bundleString);
+     * ```
+     */
+    loadBundle(bundle: string): Promise<LoadBundleTaskProgress>;
+    /**
+     * Reads a Firestore Query from local cache, identified by the given name.
+     *
+     * #### Example
+     *
+     * ```js
+     * const query = firestore().namedQuery('latest-stories-query');
+     * const storiesSnap = await query.get({ source: 'cache' });
+     * ```
+     */
+    namedQuery<T extends DocumentData = DocumentData>(name: string): Query<T>;
     /**
      * Aimed primarily at clearing up any data cached from running tests. Needs to be executed before any database calls
      * are made.
