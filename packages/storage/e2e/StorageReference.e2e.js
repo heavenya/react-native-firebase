@@ -211,7 +211,7 @@ describe('storage() -> StorageReference', function () {
       metadata.bucket.should.equal(`${firebase.app().options.projectId}.appspot.com`);
       metadata.metageneration.should.be.a.String();
       metadata.md5Hash.should.be.a.String();
-      should.equal(metadata.cacheControl, null);
+      should.equal(metadata.cacheControl, 'public, max-age=3600');
       should.equal(metadata.contentLanguage, null);
       should.equal(metadata.customMetadata, null);
     });
@@ -612,7 +612,7 @@ describe('storage() -> StorageReference', function () {
       }
     });
 
-    it('allows valid metadata properties for upload', async function () {
+    xit('allows valid metadata properties for upload', async function () {
       const storageReference = firebase.storage().ref(`${PATH}/metadataTest.jpeg`);
       await storageReference.put(new jet.context.window.ArrayBuffer(), {
         contentType: 'image/jpg',
